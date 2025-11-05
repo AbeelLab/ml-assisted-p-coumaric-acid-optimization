@@ -1,10 +1,10 @@
 # p-Coumaric acid project
-Exploration and exploitation in large combinatorial design spaces
-
-Project structure
-
+Code for the research paper: Machine Learning-Assisted Pathway Optimization in Large Combinatorial Design Spaces: a p-Coumaric Acid Case Study
 
 ## Data
+DNA sequencing data (.fasta files) can be found in the [4tu](https://data.4tu.nl/private_datasets/6dlB-LgfrrnNYgKZgtBVsGOGK-eLudArNDK79vFXNx8) repository.
+
+
 1. Promoter strength screening: [PromoterScreen_FCS_Elif](data/raw/PromoterScreen_FCS_Elif)
 2. Data for choosing the genes for optimization: [GeneTargets](data/raw/GeneTargets)
 - The Brenda database for brendapyrser
@@ -52,5 +52,4 @@ From old project: 1704_combinatorial_interrogation.py
 13. analysis of new designs: [AnalysisValidationRound.py](scripts/AnalysisValidationRound.py). 
 
 
-## Results
 
