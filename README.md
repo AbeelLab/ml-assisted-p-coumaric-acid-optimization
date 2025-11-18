@@ -2,7 +2,7 @@
 Code for the research paper: Machine Learning-Assisted Pathway Optimization in Large Combinatorial Design Spaces: a p-Coumaric Acid Case Study
 
 ## Data
-DNA sequencing data (.fasta files) can be found in the [4tu](https://data.4tu.nl/private_datasets/6dlB-LgfrrnNYgKZgtBVsGOGK-eLudArNDK79vFXNx8) repository.
+DNA sequencing data (.fasta files) can be found in the [4tu](https://doi.org/10.4121/fa0782ab-760d-4fa7-babf-09bdaab0f509) repository.
 
 
 1. Promoter strength screening: [PromoterScreen_FCS_Elif](data/raw/PromoterScreen_FCS_Elif)
