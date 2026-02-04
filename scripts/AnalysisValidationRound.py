@@ -234,7 +234,7 @@ names = P1 + "-" + O1
 fig, ax1 = plt.subplots(figsize=(8, 4),)
 ax1.bar(names, average['mean_norm_pCA'], yerr=average['std_norm_pCA'], color="#00468BFF", capsize=3)
 ax1.set_ylim(0,2)
-ax1.set_xticklabels(names, rotation=45)
+ax1.set_xticklabels(names, rotation=45,ha="right")
 ax1.set_ylabel("Normalized [p-CA]")
 ax1.set_xlabel("Library element")
 ax1.axhline(1.01193953456951,linestyle="--", color="black")
