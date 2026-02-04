@@ -1,6 +1,7 @@
 # p-Coumaric acid project
 Code for the research paper: Machine Learning-Assisted Pathway Optimization in Large Combinatorial Design Spaces: a p-Coumaric Acid Case Study
 
+
 ## Data
 DNA sequencing data (.fasta files) can be found in the [4tu](https://doi.org/10.4121/fa0782ab-760d-4fa7-babf-09bdaab0f509) repository.
 
