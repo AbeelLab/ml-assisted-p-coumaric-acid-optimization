@@ -1,10 +1,10 @@
 # p-Coumaric acid project
 Code for the research paper: Machine Learning-Assisted Pathway Optimization in Large Combinatorial Design Spaces: a p-Coumaric Acid Case Study
 
-
+NOTE: the data folder in the github repo only has processed data. For the raw data (and .fasta files), we refer to the 
+[4tu](https://doi.org/10.4121/fa0782ab-760d-4fa7-babf-09bdaab0f509) repository.
 ## Data
 DNA sequencing data (.fasta files) can be found in the [4tu](https://doi.org/10.4121/fa0782ab-760d-4fa7-babf-09bdaab0f509) repository.
-
 
 1. Promoter strength screening: [PromoterScreen_FCS_Elif](data/raw/PromoterScreen_FCS_Elif)
 2. Data for choosing the genes for optimization: [GeneTargets](data/raw/GeneTargets)
