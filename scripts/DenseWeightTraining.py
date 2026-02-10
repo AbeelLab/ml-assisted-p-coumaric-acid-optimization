@@ -10,6 +10,7 @@ import xgboost as xgb
 from xgboost import XGBClassifier, XGBRegressor
 from sklearn.model_selection import train_test_split
 from scipy.stats import linregress
+from sklearn.model_selection import GroupShuffleSplit
 
 def gradient(predt: np.ndarray,
              dtrain: xgb.DMatrix) -> np.ndarray:
@@ -108,9 +109,14 @@ screening = pd.concat([screening1, screening2])
 
 data = pd.merge(strain_count_matrix, screening, how="left", left_index=True, right_on="SampleName")
 
+# used to ensure that replicates are not in the test set (catched by the reviewer)
+groups = data.index
+
+
 #%%
 #ML modelling
-train_x, test_x, train_y, test_y = train_test_split(data.iloc[:, :-1], data.iloc[:, -1], test_size=0.20, shuffle=True)
+X = data.iloc[:, :-1]
+y = data.iloc[:, -1]
 
 predicted_values = []
 true_values = []
@@ -121,28 +127,38 @@ r2_values_top = []
 
 parameters = {'tree_method': 'auto', 'reg_lambda': 1, 'max_depth': 2, "disable_default_eval_metric": 0}
 # perform 100 train_test splits, with 10% test set size
-for i in range(100):
-    train_x, test_x, train_y, test_y = train_test_split(data.iloc[:, :-1], data.iloc[:, -1], test_size=0.20,
-                                                        shuffle=True)
-    top_test_y_indices = np.argsort(test_y).values[::-1][0:20]
 
-    test_y_top = test_y.iloc[list(top_test_y_indices)]
-    test_x_top = test_x.iloc[list(top_test_y_indices), :]
+
+gss = GroupShuffleSplit(n_splits=100, test_size=0.20, random_state=0)
+
+for train_idx, test_idx in gss.split(X, y, groups):
+
+    train_x, test_x = X.iloc[train_idx], X.iloc[test_idx]
+    train_y, test_y = y.iloc[train_idx], y.iloc[test_idx]
+
+    # just to be sure, throw error if there is an intersection
+    # between labels of train_x and test_x to prevent leakage
+    assert len(np.intersect1d(train_x.index,test_x.index)) == 0, "This should not happen"
+
+
+    # top 20 test samples by true value
+    top_test_y_indices = np.argsort(test_y.values)[::-1][:20]
+
+    test_y_top = test_y.iloc[top_test_y_indices]
+    test_x_top = test_x.iloc[top_test_y_indices]
 
     dtrain = xgb.DMatrix(train_x, label=train_y)
-    dtest = xgb.DMatrix(test_x, label=test_y.to_list())
+    dtest = xgb.DMatrix(test_x, label=test_y.values)
+    dtest_top = xgb.DMatrix(test_x_top, label=test_y_top.values)
 
-    dtest_top = xgb.DMatrix(test_x_top, label=test_y_top.to_list())
-
-    # a test of the
-    regressor = TabPFNRegressor()
-
-    bst = xgb.train(params=parameters,  # any other tree method is fine.
-                    dtrain=dtrain,
-                    evals=[(dtrain, "train"), (dtest, "validation")],
-                    num_boost_round=300,
-                    early_stopping_rounds=40,
-                    obj=balanced_mse_wrapper(dw))
+    bst = xgb.train(
+        params=parameters,
+        dtrain=dtrain,
+        evals=[(dtrain, "train"), (dtest, "validation")],
+        num_boost_round=300,
+        early_stopping_rounds=40,
+        obj=balanced_mse_wrapper(dw)
+    )
 
     preds = bst.predict(dtest)
     true_value = dtest.get_label()
@@ -150,15 +166,11 @@ for i in range(100):
     preds_top = bst.predict(dtest_top)
     true_value_top = dtest_top.get_label()
 
-    slope, intercept, r_value, p_value, std_err = linregress(true_value, preds)
-    slope, intercept, r_value_top, p_value, std_err = linregress(true_value_top, preds_top)
+    _, _, r_value, _, _ = linregress(true_value, preds)
+    _, _, r_value_top, _, _ = linregress(true_value_top, preds_top)
 
-    score_GradBoost = r_value ** 2
-    score_GradBoost_top = r_value_top ** 2
-
-    r2_values.append(score_GradBoost)
-    r2_values_top.append(score_GradBoost_top)
-    # print(r2_values)
+    r2_values.append(r_value ** 2)
+    r2_values_top.append(r_value_top ** 2)
 
     predicted_values.append(preds)
     true_values.append(true_value)

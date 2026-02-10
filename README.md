@@ -35,9 +35,9 @@ for machine learning. Gff files are made available upon request.
 
 8. Sampling the designs for sequencing, after screening [SampleDesignsForSequencing.py](scripts/SampleDesignsForSequencing.py).
 
-#### Rescreening and rebuild
+#### Rescreening 
 1. Rescreened top 86: [RescreeningTopProducers](scripts/RescreeningTopProducers.py)
-2. Rebuild
+
 
 #### Library visualizations
 10. Gene count fraction: [AssessGeneContent.py](scripts/AssessGeneContent.py)
@@ -50,7 +50,8 @@ From old project: 1704_combinatorial_interrogation.py
 010724_individualcontributions_genes.py, 2504_combination_analysis.py
 
 #### Round 2 (DoE)
-13. analysis of new designs: [AnalysisValidationRound.py](scripts/AnalysisValidationRound.py). 
+13. Recommendation of the new strains (ML-assisted DoE)[170624_newdesigns_V2.ipynb](scripts/170624_newdesigns_V2.ipynb)
+14. analysis of new designs: [AnalysisValidationRound.py](scripts/AnalysisValidationRound.py).
 
 
 
